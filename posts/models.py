@@ -7,8 +7,8 @@ class Post(models.Model):
     """
     owner = models.OneToOneField(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True)
-    author = models.TextField(blank=True)
-    content = bio = models.TextField(blank=True)
+    author = models.CharField(max_length=255, blank=True)
+    content = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(
