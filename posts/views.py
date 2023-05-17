@@ -6,12 +6,18 @@ from .serializers import PostSerializer
 
 
 class PostList(APIView):
+    """
+    API endpoint for listing and creating posts.
+    """
     serializer_class = PostSerializer
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly
     ]
     
     def get(self, request):
+        """
+        Get a list of all posts.
+        """
         posts = Post.objects.all()
         serializer = PostSerializer(
             posts, many=True, context={'request': request}
@@ -19,6 +25,9 @@ class PostList(APIView):
         return Response(serializer.data)
     
     def post(self, request):
+        """
+        Create a new post or throw a 400 error.
+        """
         serializer = PostSerializer(
             data=request.data, context={'request': request}
         )
