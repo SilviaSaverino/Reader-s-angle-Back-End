@@ -31,7 +31,7 @@ class Post(models.Model):
         ('cookbooks', 'Cookbooks')
     ]
 
-    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True)
     author = models.CharField(max_length=255, blank=True)
     genre = models.CharField(max_length=255, blank=True)
@@ -43,7 +43,6 @@ class Post(models.Model):
     )
     image_filter = models.CharField(
         max_length=30, choices=image_filter_choices, default='normal')
-
     genre_filter = models.CharField(
         max_length=30, choices=genre_filter_choices, default='normal')
 
@@ -51,4 +50,4 @@ class Post(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f'{self.id} {self.title} {self.genre}'
+        return f'{self.id} {self.title}'
