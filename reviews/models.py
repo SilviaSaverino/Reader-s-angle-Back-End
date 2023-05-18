@@ -2,9 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from posts.model import Post
 
-class Reviews(models.Model):
+class Review(models.Model):
     """
-    Reviews model, related to User and Post
+    Review model, related to User and Post
     """
     owner =  models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
