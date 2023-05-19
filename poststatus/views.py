@@ -16,5 +16,5 @@ class PostStatusList(generics.ListCreateAPIView):
 class PostStatusDetail(generics.RetrieveUpdateDestroyAPIView):
     
     permission_classes = [IsOwnerOrReadOnly]
-    serializer_class = PostStatusSerializer()
+    serializer_class = PostStatusSerializer
     queryset = PostStatus.objects.all()

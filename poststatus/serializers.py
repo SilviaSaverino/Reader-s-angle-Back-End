@@ -10,5 +10,5 @@ class PostStatusSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source="owner.username")
     
     class Meta:
-        model: PostStatus
+        model = PostStatus
         fields = ['id', 'post', 'owner', 'status']
