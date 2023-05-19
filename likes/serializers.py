@@ -7,7 +7,7 @@ class LikeSerializer(serializers.ModelSerializer):
     """
     Serializer for the Like model
     """
-    owner = serializer.ReadOnlyField(source='owner.username')
+    owner = serializers.ReadOnlyField(source='owner.username')
     
     
     class Meta:
