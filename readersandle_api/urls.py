@@ -24,4 +24,5 @@ urlpatterns = [
     path('', include('reviews.urls')),
     path('', include('likes.urls')),
     path('', include('poststatus.urls')),
+    path('', include('reviewlikes.urls')),
     ]
