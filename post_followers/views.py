@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions
 from readersandle_api.permissions import IsOwnerOrReadOnly
 from .models import PostFollower
+from posts.models import Post
 from .serializers import PostFollowerSerializer
 
 
@@ -9,8 +10,11 @@ class PostFollowerList(generics.ListCreateAPIView):
     View for listing and creating PostFollower instances.
     """
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    queryset = PostFollower.objects.all()
+    # queryset = PostFollower.objects.all()
     serializer_class = PostFollowerSerializer
+
+    def get_queryset(self):
+        return Post.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
