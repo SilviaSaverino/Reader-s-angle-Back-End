@@ -1,7 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
-
-# Create your models here.
 
 
 class Post(models.Model):
@@ -32,7 +31,12 @@ class Post(models.Model):
     ]
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255, blank=True)
+    title = models.CharField(
+        max_length=255, 
+        unique=True, 
+        blank=True, 
+        error_messages={
+            "unique": "A post with this title already exists. Possible duplicate"})
     author = models.CharField(max_length=255, blank=True)
     genre = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
