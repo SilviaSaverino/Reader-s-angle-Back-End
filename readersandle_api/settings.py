@@ -35,7 +35,7 @@ SECRET_KEY = 'django-insecure-b1wrn6trsw)vvyhy@a5t^$^yvv3m5=^))9spk5vh*p+z!ue_ob
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['8000-silviasaver-readersangl-ehvqjqdt5od.ws-eu97.gitpod.io']
+ALLOWED_HOSTS = ['8000-silviasaver-readersangl-ehvqjqdt5od.ws-eu97.gitpod.io', 'localhost']
 
 
 # Application definition
