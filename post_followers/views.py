@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-from readersandle_api.permissions import IsOwnerOrReadOnly 
+from readersandle_api.permissions import IsOwnerOrReadOnly
 from .models import PostFollower
 from .serializers import PostFollowerSerializer
 

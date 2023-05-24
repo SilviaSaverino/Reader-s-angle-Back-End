@@ -11,8 +11,12 @@ class ReviewLikeList(generics.ListCreateAPIView):
     serializer_class = ReviewLikeSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = ReviewLike.objects.all()
-    
+
     def perform_create(self, serializer):
+        """
+        Allows to perform additional actions or 
+        modifications before saving the instance.
+        """
         serializer.save(owner=self.request.user)
 
 class ReviewLikeDetail(generics.RetrieveDestroyAPIView):

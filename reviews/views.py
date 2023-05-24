@@ -11,8 +11,11 @@ class ReviewList(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Review.objects.all()
-    
+
     def perform_create(self, serializer):
+        """Allows to perform additional actions or 
+        modifications before saving the instance.
+        """
         serializer.save(owner=self.request.user)
 
 

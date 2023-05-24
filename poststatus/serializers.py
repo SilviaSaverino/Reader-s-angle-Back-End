@@ -8,7 +8,7 @@ class PostStatusSerializer(serializers.ModelSerializer):
     Serializer for the PostStatus model
     """
     owner = serializers.ReadOnlyField(source="owner.username")
-    
+
     class Meta:
         model = PostStatus
         fields = ['id', 'post', 'owner', 'status']

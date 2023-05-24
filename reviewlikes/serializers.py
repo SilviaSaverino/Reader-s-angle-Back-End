@@ -8,12 +8,11 @@ class ReviewLikeSerializer(serializers.ModelSerializer):
     Serializer for the ReviewLike model
     """
     owner = serializers.ReadOnlyField(source='owner.username')
-    
-    
+
     class Meta:
         model = ReviewLike
         fields = ['id', 'review', 'owner', 'created_at']
-        
+
     def create(self, validated_data):
         """
         Create a new instance of the serializer's model 
