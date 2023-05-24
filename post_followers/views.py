@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from readersandle_api.permissions import IsOwnerOrReadOnly 
 from .models import PostFollower
 from .serializers import PostFollowerSerializer
 
@@ -22,6 +23,6 @@ class PostFollowerDetail(generics.RetrieveDestroyAPIView):
     No update view, as we either follow or unfollow posts.
     Destroy a post follower, i.e., unfollow a post if the owner.
     """
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     queryset = PostFollower.objects.all()
     serializer_class = PostFollowerSerializer
