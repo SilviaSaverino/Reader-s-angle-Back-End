@@ -8,8 +8,8 @@ class PostFollowerSerializer(serializers.ModelSerializer):
     'owner' represents the user who is following the post.
     'followed_post' represents the ID of the followed post.
     """
-    owner = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
-    followed_post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
+    owner = serializers.PrimaryKeyRelatedField(read_only=True, source="owner.username", default=serializers.CurrentUserDefault())
+    followed_post = serializers.PrimaryKeyRelatedField(source="followed_post.title",queryset=Post.objects.all())
     
     class Meta:
         model = PostFollower
