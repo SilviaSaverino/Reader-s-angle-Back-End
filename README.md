@@ -207,3 +207,59 @@ Methods:
 If a duplicate like for the review and user is detected, a serializers.ValidationError is raised with the detail message "Review already liked by the user. Possible duplicate." The duplication is checked by catching the IntegrityError exception.
 
 # API Views 
+
+## PostList API View:
+The PostList API view allows for listing all posts or creating a new post if the user is logged in. It is implemented as a ListCreateAPIView from the Django generics module.
+
+A GET request to the /posts/ endpoint retrieves a list of all posts. If the user is authenticated, they can also use a POST request to create a new post. The post data is serialized using the PostSerializer class.
+
+To ensure that only authenticated users can create posts, the IsAuthenticatedOrReadOnly permission class is used. This allows read access to anyone (even unauthenticated users) but only allows write access to authenticated users.
+
+The perform_create method is overridden to associate the created post with the logged-in user. By saving the owner field of the post with the current user, the post is automatically linked to the user who created it.
+
+## PostDetail API View:
+The PostDetail API view is responsible for retrieving, updating, and deleting a specific post. It is implemented as a RetrieveUpdateDestroyAPIView from the Django generics module.
+
+A GET request to the /posts/<int:pk>/ endpoint retrieves a specific post identified by its post_id. If the user is the owner of the post, they can also perform update and delete operations on the post using the appropriate request methods.
+
+The PostSerializer class is used to serialize and deserialize the post data, ensuring consistent representation of the post in JSON format.
+
+To restrict access and ensure that only the owner of the post can modify or delete it, the IsOwnerOrReadOnly permission class is used. This permission class allows read access to anyone but only allows write access to the owner of the post.
+
+By utilizing the power of Django's generics module and the provided view classes, the PostList and PostDetail views offer a straightforward and efficient way to handle listing, creation, retrieval, updating, and deletion of posts.
+
+## PostFollowerList API View:
+The PostFollowerList API view is responsible for listing all post followers and creating a new post follower (i.e., following a post) if the user is logged in. It is implemented as a ListCreateAPIView from the Django generics module.
+
+A GET request to the /post-followers/ endpoint retrieves a list of all post followers. If the user is authenticated, they can use a POST request to create a new post follower, which means they will start following a post. The post follower data is serialized using the PostFollowerSerializer class.
+
+To ensure that only authenticated users can create post followers, the IsAuthenticatedOrReadOnly permission class is used. This permission class allows read access to anyone (even unauthenticated users) but only allows write access to authenticated users.
+
+The perform_create method is overridden to associate the created post follower with the logged-in user. By saving the owner field of the post follower with the current user, the post follower is automatically linked to the user who created it.
+
+## PostFollowerDetail API View:
+The PostFollowerDetail API view is responsible for retrieving and deleting a specific post follower. It is implemented as a RetrieveDestroyAPIView from the Django generics module.
+
+A GET request to the endpoint 'post_followers/<int:pk>/' retrieves a specific post follower identified by its post_follower_id. The post follower data is serialized using the PostFollowerSerializer class.
+
+A DELETE request to the same endpoint deletes the post follower, which means the user will stop following the post. However, there is no update view for post followers, as they can only be followed or unfollowed.
+
+To restrict access and ensure that only the owner of the post follower can delete it, the IsOwnerOrReadOnly permission class is used. This permission class allows read access to anyone but only allows write access to the owner of the post follower.
+
+## PostStatusList API View:
+The PostStatusList API view is responsible for listing all PostStatus instances and creating new PostStatus instances. It is implemented as a ListCreateAPIView from the Django generics module.
+
+A GET request to the /post-status/ endpoint retrieves a list of all PostStatus instances. If the user is authenticated, they can use a POST request to create a new PostStatus instance. The PostStatus data is serialized using the PostStatusSerializer class.
+
+To control access, the IsAuthenticatedOrReadOnly permission class is used. This permission class allows read access to anyone (even unauthenticated users) but only allows write access to authenticated users.
+
+The perform_create method is overridden to associate the created PostStatus instance with the logged-in user. By saving the owner field of the PostStatus instance with the current user, the instance is automatically linked to the user who created it.
+
+## PostStatusDetail API View:
+The PostStatusDetail API view is responsible for retrieving, updating, and deleting a specific PostStatus instance. It is implemented as a RetrieveUpdateDestroyAPIView from the Django generics module.
+
+A GET request to the /post-status/<int:pk>/ endpoint retrieves a specific PostStatus instance identified by its post_status_id. The PostStatus data is serialized using the PostStatusSerializer class.
+
+A PUT request to the same endpoint updates the PostStatus instance with the provided data. A DELETE request deletes the PostStatus instance.
+
+To control access and ensure that only the owner of the PostStatus instance can modify or delete it, the IsOwnerOrReadOnly permission class is used. This permission class allows read access to anyone but only allows write access to the owner of the PostStatus instance.
