@@ -12,3 +12,26 @@ class PostStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostStatus
         fields = ['id', 'post', 'owner', 'status']
+
+    def create(self, validated_data):
+        """
+        Create a new instance of the serializer's model.
+        If a duplicate status for the post and user is detected,
+        a validation error is raised.
+        """
+        post = validated_data['post']
+        owner = validated_data['owner']
+        status = validated_data['status']
+
+        if PostStatus.objects.filter(post=post, owner=owner, status=status).exists():
+            raise serializers.ValidationError({
+                'details': f'Post already marked as {status} by the user. Possible duplicate.'
+            })
+
+        try:
+            return super().create(validated_data)
+        except IntegrityError:
+            raise serializers.ValidationError({
+                'details': 'An error occurred while creating the post status.'
+            })
+
