@@ -45,6 +45,46 @@ The Meta class within the Post model specifies the ordering of post instances ba
 
 The model includes a __str__ method that returns a string representation of the post, displaying the post's ID and title.
 
+## Post Follower Model:
+The PostFollower model represents the followers of posts in the application. It establishes a connection between the 'owner' (user) and the 'followed_post'. The model includes a timestamp for when the follow action was created.
+
+Fields:
+- owner: This field is a foreign key referencing the User model from Django's built-in authentication system. It establishes a relationship between the PostFollower model and the user who is following the post. When a user is deleted, all associated post followers will be removed as well.
+- followed_post: This field is a foreign key referencing the Post model from the 'posts' application. It represents the post being followed. When a post is deleted, all associated post followers will be removed as well.
+- created_at: This field is a DateTimeField with the auto_now_add attribute set to True. It automatically records the date and time when the follow action is created.
+
+The PostFollower model includes the following Meta options:
+- unique_together: The unique_together option ensures that a user cannot follow the same post multiple times. It enforces uniqueness by specifying that the combination of 'owner' and 'followed_post' fields must be unique.
+
+Methods:
+- str(): This method returns a string representation of the PostFollower object. It displays the owner's username and the post ID being followed in the format: "[owner's username] follows post [post ID]".
+
+## Post Status Model
+The PostStatus model represents the status of a post for a specific user. It allows users to indicate whether they have read a post or intend to read it in the future.
+
+Fields:
+- owner: This field is a foreign key referencing the User model from Django's built-in authentication system. It establishes a relationship between the PostStatus model and the user who has a status for a post. When a user is deleted, all associated post statuses will be removed as well.
+- post: This field is a foreign key referencing the Post model from the 'posts' application. It represents the post for which the status is being recorded. When a post is deleted, all associated post statuses will be removed as well.
+- status: This field is a CharField with a maximum length of 15 characters. It allows users to choose a status for the post from predefined choices. The available choices are 'Read' and 'Will read'. Users can indicate whether they have read the book the post is about or plan to read it in the future.
+
+Methods:
+- str(): This method returns a string representation of the PostStatus object. It displays the owner and the post in the format: "[owner] [post]".
+
+## Like Model:
+The Like model represents a user's liking activity in relation to a specific post. It establishes a connection between the 'owner' (user) and the 'post' being liked. The model includes a timestamp for when the like was created.
+
+Fields:
+- owner: This field is a foreign key referencing the User model from Django's built-in authentication system. It establishes a relationship between the Like model and the user who performed the like. When a user is deleted, all associated likes will be removed as well.
+- post: This field is a foreign key referencing the Post model from the 'posts' application. It represents the post that was liked. When a post is deleted, all associated likes will be removed as well.
+- created_at: This field is a DateTimeField with the auto_now_add attribute set to True. It automatically records the date and time when the like is created.
+
+The Like model includes the following Meta options:
+- ordering: The ordering option specifies that the likes should be ordered in descending order based on the 'created_at' field.   This ensures that the most recent likes appear first in queries.
+- unique_together: The unique_together option ensures that a user cannot like the same post twice. It enforces uniqueness by specifying that the combination of 'owner' and 'post' fields must be unique.
+
+Methods:
+- str(): This method returns a string representation of the Like object. It displays the owner and the post in the format: "[owner] [post]".
+
 ## Review Model: 
 The Review model represents reviews related to users and posts. Each review contains information such as the owner, post, creation and update timestamps, and content.
 
@@ -59,6 +99,21 @@ The Meta class within the Review model specifies the ordering of review instance
 
 The model includes a __str__ method that returns a string representation of the review, displaying the review's content.
 
+## ReviewLike Model:
+The ReviewLike model represents the likes for reviews in the application. It establishes a connection between the 'owner' (user) and the 'review' being liked. The model includes a timestamp for when the like was created.
+
+Fields:
+- owner: This field is a foreign key referencing the User model from Django's built-in authentication system. It establishes a relationship between the ReviewLike model and the user who performed the like. When a user is deleted, all associated review likes will be removed as well.
+- review: This field is a foreign key referencing the Review model from the 'reviews' application. It represents the review that was liked. When a review is deleted, all associated review likes will be removed as well.
+- created_at: This field is a DateTimeField with the auto_now_add attribute set to True. It automatically records the date and time when the like is created.
+
+The ReviewLike model includes the following Meta options:
+- ordering: The ordering option specifies that the review likes should be ordered in descending order based on the 'created_at' field. This ensures that the most recent likes appear first in queries.
+- unique_together: The unique_together option ensures that a user cannot like the same review twice. It enforces uniqueness by specifying that the combination of 'owner' and 'review' fields must be unique.
+
+Methods:
+- str(): This method returns a string representation of the ReviewLike object. It displays the owner who liked the review and the review itself in the format: "[owner] liked the review [review]".
+
 # Serializers
 
 ## Profile Serializer
@@ -71,7 +126,6 @@ The serializer includes the following fields:
 The serializer's Meta class defines the model and fields that should be included in the serialized representation of the Profile model. The specified fields include: id, owner, created_at, updated_at, name, bio, image, and is_owner.
 
 ## Post Serializer
-
 The PostSerializer is responsible for serializing and deserializing data related to the Post model. It defines how the Post instances are represented in JSON format.
 
 The serializer includes the following fields:
@@ -83,6 +137,47 @@ The serializer includes the following fields:
 The serializer also includes a method called validate_image to validate the size and dimensions of the image field. It ensures that the image size is not larger than 2MB and that the height and width do not exceed 4096 pixels.
 
 The serializer's Meta class defines the model and fields that should be included in the serialized representation of the Post model. The specified fields include: id, owner, profile_id, profile_image, created_at, updated_at, title, author, content, image, is_owner, genre_filter, and image_filter.
+
+## PostFollower Serializer:
+The PostFollowerSerializer is responsible for serializing and deserializing data related to the PostFollower model. It defines how PostFollower instances are represented in JSON format.
+
+The serializer includes the following fields:
+- owner: A read-only field that represents the username of the user who is following the post.
+- followed_post: A field that allows selection of the followed post by its ID from the queryset of all posts.
+- followed_post_title: A read-only field that represents the title of the followed post.
+
+The serializer's Meta class defines the model and fields that should be included in the serialized representation of the PostFollower model. The specified fields include: id, owner, created_at, followed_post, followed_post_title
+
+Methods:
+- create(): This method overrides the default create() method of the serializer. It attempts to create a new PostFollower instance with the provided validated data. If an IntegrityError occurs, indicating a possible duplicate entry where a user is already following the post, it raises a serializers.ValidationError with the detail message "Post already followed by user. Possible duplicate."
+- get_followed_post_title(obj): This method is a SerializerMethodField that retrieves and returns the title of the followed post for a given PostFollower object (obj).
+
+## PostStatus Serializer:
+The PostStatusSerializer is responsible for serializing and deserializing data related to the PostStatus model. It defines how PostStatus instances are represented in JSON format.
+
+The serializer includes the following fields:
+- owner: A read-only field that represents the username of the owner of the post status.
+
+The serializer's Meta class defines the model and fields that should be included in the serialized representation of the PostStatus model. The specified fields include: id, post, owner, status
+
+Methods:
+- create(validated_data): This method overrides the default create() method of the serializer. It creates a new instance of the serializer's model using the provided validated data. 
+If a duplicate status for the post and user is detected, the existing instance is updated with the new status instead of creating a new one. It first checks if an existing instance with the same post and owner exists. 
+If found, it updates the status of the existing instance and saves it. 
+If no existing instance is found, it attempts to create a new instance with the validated data. 
+If an IntegrityError occurs during creation, it raises a serializers.ValidationError with the detail message "An error occurred while creating the post status."
+
+## Like Serializer:
+The LikeSerializer is responsible for serializing and deserializing data related to the Like model. It defines how Like instances are represented in JSON format.
+
+The serializer includes the following fields:
+- owner: A read-only field that represents the username of the owner of the like.
+
+The serializer's Meta class defines the model and fields that should be included in the serialized representation of the Like model. The specified fields include: id, post, owner, created_at
+
+Methods:
+- create(validated_data): This method overrides the default create() method of the serializer. It creates a new instance of the serializer's model using the provided validated data. 
+If a duplicate like for the post and user is detected, a serializers.ValidationError is raised with the detail message "Post already liked by the user. Possible duplicate." The duplication is checked by catching the IntegrityError exception.
 
 ## Review Serializer
 The ReviewSerializer is responsible for serializing and deserializing data related to the Review model. It defines how the Review instances are represented in JSON format.
@@ -99,43 +194,16 @@ The serializer's Meta class defines the model and fields that should be included
 The ReviewDetailSerializer is a subclass of ReviewSerializer and is used specifically for the detail view of a review. It adds an additional field:
 - post: A read-only field that represents the ID of the associated post.
 
+## ReviewLike Serializer:
+The ReviewLikeSerializer is responsible for serializing and deserializing data related to the ReviewLike model. It defines how ReviewLike instances are represented in JSON format.
+
+The serializer includes the following fields:
+-owner: A read-only field that represents the username of the owner of the review like.
+
+The serializer's Meta class defines the model and fields that should be included in the serialized representation of the ReviewLike model. The specified fields include: id, review, owner, created_at
+
+Methods:
+- create(validated_data): This method overrides the default create() method of the serializer. It creates a new instance of the serializer's model using the provided validated data. 
+If a duplicate like for the review and user is detected, a serializers.ValidationError is raised with the detail message "Review already liked by the user. Possible duplicate." The duplication is checked by catching the IntegrityError exception.
 
 # API Views 
-
-## ReviewList APIView
-The ReviewList APIView provides an API endpoint for listing and creating reviews.
-
-GET: Retrieve a list of all reviews.
-- Endpoint: /reviews/
-- Method: GET
-- Permissions: Requires authentication or allows read access to unauthenticated users.
-- Response: Returns a JSON response containing the serialized data of all reviews.
-
-POST: Create a new review.
-- Endpoint: /reviews/
-- Method: POST
-- Permissions: Requires authentication.
-- Request: Accepts a JSON payload containing the review data.
-- Response: Returns a JSON response containing the serialized data of the created review if the data is valid. If the data is invalid, returns a JSON response with the serializer errors.
-
-## ReviewDetail APIView
-The ReviewDetail APIView provides an API endpoint for retrieving, updating, or deleting a specific review.
-
-GET: Retrieve a specific review by its ID.
-- Endpoint: /reviews/{id}/
-- Method: GET
-- Permissions: Requires authentication or allows read access to unauthenticated users.
-- Response: Returns a JSON response containing the serialized data of the specified review.
-
-PUT: Update a specific review by its ID.
-- Endpoint: /reviews/{id}/
-- Method: PUT
-- Permissions: Requires authentication and only accessible by the owner of the review.
-- Request: Accepts a JSON payload containing the updated review data.
-- Response: Returns a JSON response containing the serialized data of the updated review if the data is valid. If the data is invalid, returns a JSON response with the serializer errors.
-
-DELETE: Delete a specific review by its ID.
-- Endpoint: /reviews/{id}/
-- Method: DELETE
-- Permissions: Requires authentication and only accessible by the owner of the review.
-- Response: Returns a JSON response with a success message if the review is deleted successfully.
