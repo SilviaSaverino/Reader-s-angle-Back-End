@@ -263,3 +263,55 @@ A GET request to the /post-status/<int:pk>/ endpoint retrieves a specific PostSt
 A PUT request to the same endpoint updates the PostStatus instance with the provided data. A DELETE request deletes the PostStatus instance.
 
 To control access and ensure that only the owner of the PostStatus instance can modify or delete it, the IsOwnerOrReadOnly permission class is used. This permission class allows read access to anyone but only allows write access to the owner of the PostStatus instance.
+
+
+# Manual testing:
+
+| Feature          | Action                                                          | Expected Result                                     | Actual Result |
+| ---------------- | --------------------------------------------------------------- | --------------------------------------------------- | ------------- |
+|Profile:          |
+| List Profiles    | Perform GET request to /api/profiles/                           | Retrieve a list of all user profiles                | Passed!       |
+| Retrieve Profile | Perform GET request to /api/profiles/:id/                       | Retrieve a specific profile by its ID               | Passed!       |
+| Update Profile   | Perform PUT request to /api/profiles/:id/ with updated data     | Update a specific profile by its ID                 | Passed!       |
+||
+| List Posts       | Perform GET request to /api/posts/                              | Retrieve a list of all posts                        | Passed!       |
+| Create Post      | Perform POST request to /api/posts/ with title and content      | Create a new post and return the created post       | Passed!       |
+| Update Post      | Perform PUT request to /api/posts/:id/ with updated data        | Update a specific post by its ID                    | Passed!       |
+| Delete Post      | Perform DELETE request to /api/posts/:id/                       | Delete a specific post by its ID                    | Passed!       |
+||
+|Poststatus :      |
+| List Poststatus     | Perform GET request to /api/poststatus/                        | Retrieve a list of post status (read/will read)   | Passed!       |
+| Create Poststatus   | Perform POST request to /api/postsstatus/ with post ID         | Create a new poststatus for a post and return it  | Passed!       |
+| Retrieve Poststatus | Perform GET request to /api/postsstatus/:id/                   | Retrieve a specific postsstatus by its ID         | Passed!       |
+| Update Poststatus   | Perform PUT request to /api/postsstatus/:id/ with updated data | Update a specific poststatus by its ID            | Passed!       |
+| Delete Poststatus   | Perform DELETE request to /api/poststatus/:id/                 | Delete a specific poststatus by its ID            | Passed!       |
+||
+|Postfollowers :   |
+| List Post_followers   | Perform GET request to /api/post_followers/                | Retrieve a list of all posts                        | Passed!       |
+| Create Post_followers | Perform POST request to /api/post_followers/ with post ID  | Create a new post and return the created post       | Passed!       |
+| Delete Post_followers | Perform DELETE request to /api/post_followers/:id/         | Delete a specific post by its ID                    | Passed!       |
+||
+|Likes :           |
+| List Likes       | Perform GET request to /api/likes/                              | Retrieve a list of all user likes                   | Passed!       |
+| Create Likes     | Perform POST request to /api/likes/ with post ID                | Create a new like and return the created one        | Passed!       |
+| Retrieve Likes   | Perform GET request to /api/likes/:id/                          | Retrieve a specific like by its ID                  | Passed!       |
+| Delete Likes     | Perform DELETE request to /api/likes/:id/                       | Delete a specific like by its ID                    | Passed!       |
+||
+|Reviews :         |
+| List Reviews     | Perform GET request to /api/reviews/                            | List all reviews                                    | Passed!       |
+| Create Reviews   | Perform POST request to /api/reviews/ with content and post ID  | Create a new review and return the created one      | Passed!       |
+| Retrieve Reviews | Perform GET request to /api/reviews/:id/                        | Retrieve a specific reviews by its ID               | Passed!       |
+| Update Reviews   | Perform PUT request to /api/reviews/:id/ with updated data      | Update a specific reviews by its ID                 | Passed!       |
+| Delete Reviews   | Perform DELETE request to /api/reviews/:id/                     | Delete a specific reviews by its ID                 | Passed!       |
+||
+|Reviewlikes :         |
+| List Reviewlikes     | Perform GET request to /api/reviewslikes/                   | List all reviewlikes                                | Passed!       |
+| Create Reviewlikes   | Perform POST request to /api/reviewslikes/                  | Create a new reviewlike and return the created one  | Passed!       |
+| Retrieve Reviewlikes | Perform GET request to /api/reviewslikes/:id/               | Retrieve a specific reviewlike by its ID            | Passed!       |
+| Delete Reviewlikes   | Perform DELETE request to /api/reviewslikes/:id/            | Delete a specific reviewlike by its ID              | Passed!       |
+
+
+
+
+
+
