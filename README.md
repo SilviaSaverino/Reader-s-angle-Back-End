@@ -3,6 +3,8 @@
  
 
 # Models
+Models are a fundamental aspect of building database-driven applications in Django. In Django, models represent the structure and behavior of the data that is stored in the database. They define the tables, fields, relationships, and constraints that make up the data schema.
+
 ![screenshot of the project schema](/repo_images/schema.png)
 
 ## Profile Model:
@@ -217,6 +219,9 @@ Methods:
 If a duplicate like for the review and user is detected, a serializers.ValidationError is raised with the detail message "Review already liked by the user. Possible duplicate." The duplication is checked by catching the IntegrityError exception.
 
 # API Views 
+API views are an essential component of building web applications and services that expose data and functionality through an API (Application Programming Interface). In the context of Django, API views are used to define how data is accessed, manipulated, and presented in a web API.
+
+In this project, the API views have been designed and implemented to handle specific resources such as posts, reviews, likes, etc. Each API view has its own set of actions and permissions defined to meet the specific requirements of the application.
 
 ## PostList API View:
 The PostList API view allows for listing all posts or creating a new post if the user is logged in. It is implemented as a ListCreateAPIView from the Django generics module.
@@ -274,6 +279,64 @@ A PUT request to the same endpoint updates the PostStatus instance with the prov
 
 To control access and ensure that only the owner of the PostStatus instance can modify or delete it, the IsOwnerOrReadOnly permission class is used. This permission class allows read access to anyone but only allows write access to the owner of the PostStatus instance.
 
+## LikeList API View:
+
+The LikeList API view is responsible for listing all likes and creating a new like if the user is logged in. It is implemented as a ListCreateAPIView from the Django generics module.
+
+A GET request to the /likes/ endpoint retrieves a list of all likes. If the user is authenticated, they can also use a POST request to create a new like. The like data is serialized using the LikeSerializer class.
+
+To ensure that only authenticated users can create likes, the IsAuthenticatedOrReadOnly permission class is used. This permission class allows read access to anyone (including unauthenticated users) but only allows write access to authenticated users.
+
+The perform_create method is overridden to associate the created like with the logged-in user. By saving the owner field of the like with the current user, the like is automatically linked to the user who created it.
+
+## LikeDetail API View:
+
+The LikeDetail API view is responsible for retrieving and deleting a specific like. It is implemented as a RetrieveDestroyAPIView from the Django generics module.
+
+A GET request to the /likes/int:pk/ endpoint retrieves a specific like identified by its like_id. If the user is the owner of the like, they can also perform delete operation on the like using the appropriate request method.
+
+The LikeSerializer class is used to serialize and deserialize the like data, ensuring consistent representation of the like in JSON format.
+
+To restrict access and ensure that only the owner of the like can delete it, the IsOwnerOrReadOnly permission class is used. This permission class allows read access to anyone but only allows write access to the owner of the like.
+
+## ReviewList API View:
+The ReviewList API view provides functionality for listing all reviews and creating a new review if the user is logged in. It is implemented as a ListCreateAPIView from the Django generics module.
+
+A GET request to the /reviews/ endpoint retrieves a list of all reviews. If the user is authenticated, they can also use a POST request to create a new review. The review data is serialized using the ReviewSerializer class.
+
+To ensure that only authenticated users can create reviews, the IsAuthenticatedOrReadOnly permission class is used. This allows read access to anyone (including unauthenticated users), but only allows write access to authenticated users.
+
+The perform_create method is overridden to associate the created review with the logged-in user. By saving the owner field of the review with the current user, the review is automatically linked to the user who created it.
+
+## ReviewDetail API View:
+
+The ReviewDetail API view is responsible for retrieving, updating, and deleting a specific review. It is implemented as a RetrieveUpdateDestroyAPIView from the Django generics module.
+
+A GET request to the /reviews/int:pk/ endpoint retrieves a specific review identified by its review_id. If the user is the owner of the review, they can also perform update and delete operations on the review using the appropriate request methods.
+
+The ReviewDetailSerializer class is used to serialize and deserialize the review data, ensuring consistent representation of the review in JSON format.
+
+To restrict access and ensure that only the owner of the review can modify or delete it, the IsOwnerOrReadOnly permission class is used. This permission class allows read access to anyone but only allows write access to the owner of the review.
+
+## ReviewLikeList API View:
+
+The ReviewLikeList API view is designed for listing all review likes and creating a new review like if the user is logged in. It is implemented as a ListCreateAPIView from the Django generics module.
+
+A GET request to the /review-likes/ endpoint retrieves a list of all review likes. If the user is authenticated, they can also use a POST request to create a new review like. The review like data is serialized using the ReviewLikeSerializer class.
+
+To ensure that only authenticated users can create review likes, the IsAuthenticatedOrReadOnly permission class is used. This permission class allows read access to anyone (including unauthenticated users) but only allows write access to authenticated users.
+
+The perform_create method is overridden to associate the created review like with the logged-in user. By saving the owner field of the review like with the current user, the review like is automatically linked to the user who created it.
+
+## ReviewLikeDetail API View:
+
+The ReviewLikeDetail API view is responsible for retrieving and deleting a specific review like. It is implemented as a RetrieveDestroyAPIView from the Django generics module.
+
+A GET request to the /review-likes/int:pk/ endpoint retrieves a specific review like identified by its like_id. If the user is the owner of the review like, they can also perform delete operation on the review like using the appropriate request method.
+
+The ReviewLikeSerializer class is used to serialize and deserialize the review like data, ensuring consistent representation of the review like in JSON format.
+
+To restrict access and ensure that only the owner of the review like can delete it, the IsOwnerOrReadOnly permission class is used. This permission class allows read access to anyone but only allows write access to the owner of the review like.
 
 # Manual testing:
 
