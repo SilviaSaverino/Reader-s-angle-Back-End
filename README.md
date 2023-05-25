@@ -390,15 +390,29 @@ To restrict access and ensure that only the owner of the review like can delete 
 | Delete Reviewlikes   | Perform DELETE request to /api/reviewslikes/:id/            | Delete a specific reviewlike by its ID              | Passed!       |
 
 
-## Bugs and Debugging:
-
+# Bugs and Debugging:
+## Cloudinary issues with default images:
 I've encountered an issue with cloudinary default profile image. It simply didn't load as expected and upon investigation this is what it was shown:
-
 ![screenshot of cloudinary profile image bug](repo_images/cloudinary_bug.png)
 
+After realizing that the issue wasn't with my models but with some other images in Cloudinary, I took the following steps to fix it:
+- I deleted any duplicate images from my Cloudinary storage.
+- I uploaded new default images for posts and profiles to the Cloudinary media library.
+- I edited the default image fields in both models to match the names of the new images.
+- To make sure everything was up to date, I cleared the cache.
+- In the admin panel, I created a new profile and a new post to see if the images were now displaying properly.
 
+After completing these steps, I clicked on the posts and profile default images in their respective lists, and I was relieved to see that they were now displaying correctly.
+
+![screenshot of default post image](/repo_images/bug_postimage.png)
+
+![screenshot of default profile image](/repo_images/but_profileimage.png)
+
+## TypeError in postFollower:
 ### Snippet of a shown error:
+
 " Got a `TypeError` when calling `PostFollower.objects.create()`. This may be because you have a writable field on the serializer class that is not a valid argument to `PostFollower.objects.create()`. You may need to make the field read-only, or override the PostFollowerSerializer.create() method to handle this correctly. "
+--------------------------------------------------------------------------------------------------------------------------------
 
 During development, an issue was encountered where users were unable to follow posts due to some errors in my model and lately a TypeError in the code. The error occurred because the serializer was trying to pass an unexpected keyword argument to the PostFollower.objects.create() method. The problem was resolved by updating the model and its serializer's create() method to handle the creation of the PostFollower object correctly.
 
