@@ -3,7 +3,11 @@
  
 
 # Models
+![screenshot of the project schema](/repo_images/schema.png)
+
 ## Profile Model:
+![screenshot of profile model](repo_images/profile_model.png)
+
 The Profile model represents user profiles and contains information such as the owner, creation and update timestamps, name, bio, and image.
 
 Fields:
@@ -14,8 +18,6 @@ Fields:
 - bio: TextField allowing for an optional bio or description for the profile.
 - image: ImageField specifying the location where profile images are uploaded. It uses the 'images/' directory as the upload      destination and has a default image specified as '../default_profile_xyw4hp'.
 
-![screenshot of profile model](repo_images/profile_model.png)
-
 The Meta class within the Profile model specifies the ordering of profile instances based on their creation timestamps. Profiles are ordered in descending order by created_at.
 
 The model includes a __str__ method that returns a string representation of the profile, indicating the owner's username.
@@ -23,6 +25,8 @@ The model includes a __str__ method that returns a string representation of the 
 A create_profile function is defined as a signal receiver and connected to the post_save signal of the User model. This function automatically creates a profile for a newly created user.
 
 ## Post model:
+![screenshot of post model](/repo_images/post_model.png)
+
 The Post model represents posts related to owners/users. Each post contains information such as the owner, title, author, genre, content, creation and update timestamps, image, image filter, and genre filter.
 
 Fields:
@@ -42,6 +46,8 @@ The Meta class within the Post model specifies the ordering of post instances ba
 The model includes a __str__ method that returns a string representation of the post, displaying the post's ID and title.
 
 ## Post Follower Model:
+![screenshot of postfollowers model](/repo_images/postfollowers_model.png)
+
 The PostFollower model represents the followers of posts in the application. It establishes a connection between the 'owner' (user) and the 'followed_post'. The model includes a timestamp for when the follow action was created.
 
 Fields:
@@ -56,6 +62,8 @@ Methods:
 - str(): This method returns a string representation of the PostFollower object. It displays the owner's username and the post ID being followed in the format: "[owner's username] follows post [post ID]".
 
 ## Post Status Model
+![screenshot of poststatus model](/repo_images/poststatus_model.png)
+
 The PostStatus model represents the status of a post for a specific user. It allows users to indicate whether they have read a post or intend to read it in the future.
 
 Fields:
@@ -67,6 +75,8 @@ Methods:
 - str(): This method returns a string representation of the PostStatus object. It displays the owner and the post in the format: "[owner] [post]".
 
 ## Like Model:
+![screenshot of like model](/repo_images/like_model.png)
+
 The Like model represents a user's liking activity in relation to a specific post. It establishes a connection between the 'owner' (user) and the 'post' being liked. The model includes a timestamp for when the like was created.
 
 Fields:
@@ -82,6 +92,8 @@ Methods:
 - str(): This method returns a string representation of the Like object. It displays the owner and the post in the format: "[owner] [post]".
 
 ## Review Model: 
+![screenshot of review model](/repo_images/reviews_model.png)
+
 The Review model represents reviews related to users and posts. Each review contains information such as the owner, post, creation and update timestamps, and content.
 
 Fields:
@@ -95,7 +107,9 @@ The Meta class within the Review model specifies the ordering of review instance
 
 The model includes a __str__ method that returns a string representation of the review, displaying the review's content.
 
-## ReviewLike Model:
+## ReviewLikes Model:
+![screenshot of reviewlikes model](/repo_images/reviewlikes_model.png)
+
 The ReviewLike model represents the likes for reviews in the application. It establishes a connection between the 'owner' (user) and the 'review' being liked. The model includes a timestamp for when the like was created.
 
 Fields:
