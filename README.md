@@ -1,6 +1,9 @@
-# Reader's angle - 5th portfolio project for CodeInstitute full stack course.
+# Reader's angle
+'Reader's angle' website project had been created as a final portfolio project for Code Institute full stack course! The project aims to provide an intuitive backend solution using Django Rest Framework.
 
- 
+At the core of this website, users can create posts dedicated to books, allowing them to express their thoughts, opinions, and recommendations for others to explore. Additionally, users have the opportunity to provide detailed reviews, offering valuable feedback on specific books and contributing to a vibrant literary community. By expressing their liking for posts and indicating their reading intentions (whether they have read a book or plan to read it), users can engage with books in a personalized and meaningful manner.
+
+This project prioritizes comprehensive CRUD (Create, Read, Update, Delete) functionality for each model, granting users complete control over their interactions and experiences on the website.
 
 # Models
 Models are a fundamental aspect of building database-driven applications in Django. In Django, models represent the structure and behavior of the data that is stored in the database. They define the tables, fields, relationships, and constraints that make up the data schema.
