@@ -1,10 +1,6 @@
 # Reader's angle - 5th portfolio project for CodeInstitute full stack course.
 
-## Bugs and Debugging:
-
-I've encountered an issue with cloudinary default profile image. It simply didn't load as expected and upon investigation this is what it was shown:
-
-![screenshot of cloudinary profile image bug](repo_images/cloudinary_bug.png)
+ 
 
 # Models
 ## Profile Model:
@@ -311,7 +307,17 @@ To control access and ensure that only the owner of the PostStatus instance can 
 | Delete Reviewlikes   | Perform DELETE request to /api/reviewslikes/:id/            | Delete a specific reviewlike by its ID              | Passed!       |
 
 
+## Bugs and Debugging:
 
+I've encountered an issue with cloudinary default profile image. It simply didn't load as expected and upon investigation this is what it was shown:
+
+![screenshot of cloudinary profile image bug](repo_images/cloudinary_bug.png)
+
+
+### Snippet of a shown error:
+" Got a `TypeError` when calling `PostFollower.objects.create()`. This may be because you have a writable field on the serializer class that is not a valid argument to `PostFollower.objects.create()`. You may need to make the field read-only, or override the PostFollowerSerializer.create() method to handle this correctly. "
+
+During development, an issue was encountered where users were unable to follow posts due to some errors in my model and lately a TypeError in the code. The error occurred because the serializer was trying to pass an unexpected keyword argument to the PostFollower.objects.create() method. The problem was resolved by updating the model and its serializer's create() method to handle the creation of the PostFollower object correctly.
 
 
 
