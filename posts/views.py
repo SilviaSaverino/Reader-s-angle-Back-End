@@ -41,6 +41,7 @@ class PostList(generics.ListCreateAPIView):
         'title',
         'genre_filter',
         'author',
+        
     ]
 
     def perform_create(self, serializer):

@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Post
 from post_followers.models import PostFollower
 from likes.models import Like
+from poststatus.models import PostStatus
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -17,6 +18,7 @@ class PostSerializer(serializers.ModelSerializer):
     likes_count = serializers.ReadOnlyField()
     review_count = serializers.ReadOnlyField()
     followed_count = serializers.ReadOnlyField()
+    post_status = serializers.SerializerMethodField()
     
     def validate_image(self, value):
         """
@@ -71,6 +73,19 @@ class PostSerializer(serializers.ModelSerializer):
             return like.id if like else None
         return None   
     
+    def get_post_status(self, obj):
+        """
+        Retrieve the status of the post for the authenticated user.
+        If the user is not authenticated or no status is found, return None.
+        """
+        user = self.context['request'].user
+        if user.is_authenticated:
+            post_status = PostStatus.objects.filter(owner=user, post=obj).first()
+            return post_status.status if post_status else None
+        return None
+
+        
+    
     class Meta:
         model = Post
         fields = [
@@ -79,4 +94,5 @@ class PostSerializer(serializers.ModelSerializer):
             'author', 'content', 'image', 'is_owner',
             'genre_filter', 'image_filter', 'following_id','like_id',
             'likes_count', 'review_count', 'followed_count',
+            'post_status',
         ]
