@@ -19,13 +19,20 @@ class PostList(generics.ListCreateAPIView):
         followed_count=Count('followed', distinct=True),
     ).order_by('-created_at')
     filter_backends = [
-        filters.OrderingFilter
+        filters.OrderingFilter,
+        filters.SearchFilter,
     ]
     ordering_fields = [
         'likes_count',
         'review_count',
         'followed_count',
         'likes__created_at',
+    ]
+    search_fields = [
+        'owner__username',
+        'title',
+        'genre_filter',
+        'author',
     ]
 
     def perform_create(self, serializer):
