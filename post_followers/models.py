@@ -14,4 +14,4 @@ class PostFollower(models.Model):
         unique_together = ['owner', 'followed_post']
 
     def __str__(self):
-        return f'{self.owner.username} follows post {self.post.id}'
+        return f'{self.owner.username} follows post {self.followed_post.id}'
