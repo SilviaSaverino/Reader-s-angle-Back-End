@@ -49,7 +49,7 @@ class Post(models.Model):
         max_length=30, choices=image_filter_choices, default='normal')
     genre_filter = models.CharField(
         max_length=30, choices=genre_filter_choices, default='normal')
-
+    
     class Meta:
         ordering = ['-created_at']
 
