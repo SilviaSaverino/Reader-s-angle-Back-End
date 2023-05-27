@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from reviewlikes.models import ReviewLike
 from .models import Review
 
 
@@ -11,7 +12,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
     profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
-
+    reviewlike_id = serializers.SerializerMethodField()
 
     def get_is_owner(self, obj):
         """
@@ -20,11 +21,26 @@ class ReviewSerializer(serializers.ModelSerializer):
         request = self.context['request']
         return request.user == obj.owner
 
+    def get_reviewlike_id(self, obj):
+        """
+        Retrieve the ID of the like associated with the review,
+        if the authenticated user has liked the review.
+        If the user is not authenticated or 
+        hasn't liked the review, return None.
+        """     
+        user = self.context['request'].user
+        if user.is_authenticated:
+            reviewlike = ReviewLike.objects.filter(
+                owner=user, review=obj
+            ).first()
+            return reviewlike.id if reviewlike else None
+        return None
+    
     class Meta:
         model = Review
         fields = [
             'id', 'owner', 'post', 'profile_id', 'profile_image',
-            'created_at', 'updated_at', 'content', 'is_owner',
+            'created_at', 'updated_at', 'content', 'is_owner', 'reviewlike_id'
         ]
 
 
