@@ -28,7 +28,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         if the authenticated user has liked the review.
         If the user is not authenticated or 
         hasn't liked the review, return None.
-        """     
+        """
         user = self.context['request'].user
         if user.is_authenticated:
             reviewlike = ReviewLike.objects.filter(
@@ -36,7 +36,7 @@ class ReviewSerializer(serializers.ModelSerializer):
             ).first()
             return reviewlike.id if reviewlike else None
         return None
-    
+
     class Meta:
         model = Review
         fields = [

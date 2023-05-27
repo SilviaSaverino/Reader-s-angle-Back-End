@@ -56,7 +56,7 @@ class PostSerializer(serializers.ModelSerializer):
                 owner=user, followed_post=obj.id
             ).first()
             return following.id if following else None
-        return None        
+        return None
 
     def get_like_id(self, obj):
         """
@@ -64,7 +64,7 @@ class PostSerializer(serializers.ModelSerializer):
         if the authenticated user has liked the post.
         If the user is not authenticated or 
         hasn't liked the post, return None.
-        """     
+        """
         user = self.context['request'].user
         if user.is_authenticated:
             like = Like.objects.filter(

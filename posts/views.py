@@ -18,7 +18,7 @@ class PostList(generics.ListCreateAPIView):
         likes_count=Count('likes', distinct=True),
         review_count=Count('review', distinct=True),
         followed_count=Count('followed', distinct=True),
-       
+
     ).order_by('-created_at')
     filter_backends = [
         filters.OrderingFilter,
@@ -29,15 +29,15 @@ class PostList(generics.ListCreateAPIView):
         'followed__owner__profile',
         'likes__owner__profile',
         'owner__profile',
-          
+
     ]
-    
+
     ordering_fields = [
         'likes_count',
         'review_count',
         'followed_count',
         'likes__created_at',
-        
+
     ]
     search_fields = [
         'owner__username',
@@ -62,4 +62,3 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
         review_count=Count('review', distinct=True),
         followed_count=Count('followed', distinct=True),
     ).order_by('-created_at')
-

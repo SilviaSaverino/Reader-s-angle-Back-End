@@ -16,7 +16,10 @@ class PostStatus(models.Model):
     post = models.ForeignKey(
         Post, related_name='poststatus', on_delete=models.CASCADE
     )
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE,related_name='status_choice', default=0)
+    profile = models.ForeignKey(Profile,
+        on_delete=models.CASCADE,
+        related_name='status_choice',
+        default=0)
     status = models.CharField(max_length=15, choices=STATUS_CHOICES)
 
     def __str__(self):

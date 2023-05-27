@@ -1,7 +1,6 @@
 from rest_framework import generics, filters
 from django.db.models import Count, Case, When
 from readersandle_api.permissions import IsOwnerOrReadOnly
-from poststatus.models import PostStatus
 from .models import Profile
 from .serializers import ProfileSerializer
 
