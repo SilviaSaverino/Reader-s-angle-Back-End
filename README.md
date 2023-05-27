@@ -74,6 +74,7 @@ The PostStatus model represents the status of a post for a specific user. It all
 Fields:
 - owner: This field is a foreign key referencing the User model from Django's built-in authentication system. It establishes a relationship between the PostStatus model and the user who has a status for a post. When a user is deleted, all associated post statuses will be removed as well.
 - post: This field is a foreign key referencing the Post model from the 'posts' application. It represents the post for which the status is being recorded. When a post is deleted, all associated post statuses will be removed as well.
+- profile: This field is a foreign key referencing the Profile model from the 'profiles' application. It represents the profile associated with the user who has a status for a post. When a profile is deleted, all associated post statuses will be removed as well. The default value is set to 0.
 - status: This field is a CharField with a maximum length of 15 characters. It allows users to choose a status for the post from predefined choices. The available choices are 'Read' and 'Will read'. Users can indicate whether they have read the book the post is about or plan to read it in the future.
 
 Methods:
@@ -140,8 +141,17 @@ The ProfileSerializer is responsible for serializing and deserializing data rela
 The serializer includes the following fields:
 - owner: A read-only field that represents the username of the profile owner.
 - is_owner: A custom field that determines whether the authenticated user is the owner of the profile.
+- posts_count: A read-only field that represents the count of posts associated with the profile.
+- reviews_count: A read-only field that represents the count of reviews associated with the profile.
+- read_posts_count: A custom field that retrieves the count of posts marked as "Read" for the profile.
+- will_read_posts_count: A custom field that retrieves the count of posts marked as "Will read" for the profile.
 
-The serializer's Meta class defines the model and fields that should be included in the serialized representation of the Profile model. The specified fields include: id, owner, created_at, updated_at, name, bio, image, and is_owner.
+Methods
+- get_is_owner(obj): This method is a SerializerMethodField that checks whether the authenticated user is the owner of the profile (obj).
+- get_read_posts_count(obj): This method is a SerializerMethodField that retrieves the count of posts marked as "Read" for the profile (obj).
+- get_will_read_posts_count(obj): This method is a SerializerMethodField that retrieves the count of posts marked as "Will read" for the profile (obj).
+
+The serializer's Meta class defines the model and fields that should be included in the serialized representation of the Profile model. The specified fields include: id, owner, created_at, updated_at, name, bio, image, is_owner, posts_count, reviews_count, read_posts_count, and will_read_posts_count.
 
 ## Post Serializer
 The PostSerializer is responsible for serializing and deserializing data related to the Post model. It defines how the Post instances are represented in JSON format.
@@ -151,10 +161,21 @@ The serializer includes the following fields:
 - is_owner: A custom field that determines whether the authenticated user is the owner of the post.
 - profile_id: A read-only field that represents the ID of the owner's profile.
 - profile_image: A read-only field that represents the URL of the owner's profile image.
+- following_id: A custom field that retrieves the ID of the post follower, if the authenticated user follows the post.
+- like_id: A custom field that retrieves the ID of the like associated with the post, if the authenticated user has liked the post.
+- likes_count: A read-only field that represents the count of likes associated with the post.
+- review_count: A read-only field that represents the count of reviews associated with the post.
+- followed_count: A read-only field that represents the count of followers for the post.
+- post_status: A custom field that retrieves the status of the post for the authenticated user.
 
-The serializer also includes a method called validate_image to validate the size and dimensions of the image field. It ensures that the image size is not larger than 2MB and that the height and width do not exceed 4096 pixels.
+Methods
+- validate_image(value): This method validates the size and dimensions of the image field. It checks if the image size is larger than 2MB and if the height and width exceed 4096 pixels.
+- get_is_owner(obj): This method is a SerializerMethodField that checks whether the authenticated user is the owner of the post (obj).
+- get_following_id(obj): This method is a SerializerMethodField that retrieves the ID of the post follower if the authenticated user follows the post.
+- get_like_id(obj): This method is a SerializerMethodField that retrieves the ID of the like associated with the post if the authenticated user has liked the post.
+- get_post_status(obj): This method is a SerializerMethodField that retrieves the status of the post for the authenticated user.
 
-The serializer's Meta class defines the model and fields that should be included in the serialized representation of the Post model. The specified fields include: id, owner, profile_id, profile_image, created_at, updated_at, title, author, content, image, is_owner, genre_filter, and image_filter.
+The serializer's Meta class defines the model and fields that should be included in the serialized representation of the Post model. The specified fields include: id, owner, profile_id, profile_image, created_at, updated_at, title, author, content, image, is_owner, genre_filter, image_filter, following_id, like_id, likes_count, review_count, followed_count, and post_status.
 
 ## PostFollower Serializer:
 The PostFollowerSerializer is responsible for serializing and deserializing data related to the PostFollower model. It defines how PostFollower instances are represented in JSON format.
@@ -205,8 +226,15 @@ The serializer includes the following fields:
 - is_owner: A custom field that determines whether the authenticated user is the owner of the review.
 - profile_id: A read-only field that represents the ID of the owner's profile.
 - profile_image: A read-only field that represents the URL of the owner's profile image.
-
+- reviewlike_id: A custom field that retrieves the ID of the like associated with the review if the authenticated user has liked the review.
+- reviewlikes_count: A read-only field that represents the count of likes associated with the review.
 The serializer's Meta class defines the model and fields that should be included in the serialized representation of the Review model. The specified fields include: id, owner, post, profile_id, profile_image, created_at, updated_at, content, and is_owner.
+
+Methods
+- get_is_owner(obj): This method is a SerializerMethodField that checks whether the authenticated user is the owner of the review (obj).
+- get_reviewlike_id(obj): This method is a SerializerMethodField that retrieves the ID of the like associated with the review if the authenticated user has liked the review.
+
+The serializer's Meta class defines the model and fields that should be included in the serialized representation of the Review model. The specified fields include: id, owner, post, profile_id, profile_image, created_at, updated_at, content, is_owner, reviewlike_id, and reviewlikes_count.
 
 ### Review Detail Serializer
 The ReviewDetailSerializer is a subclass of ReviewSerializer and is used specifically for the detail view of a review. It adds an additional field:
