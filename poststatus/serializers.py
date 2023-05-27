@@ -11,7 +11,7 @@ class PostStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostStatus
-        fields = ['id', 'post', 'owner', 'status']
+        fields = ['id', 'post', 'owner', 'status',]
 
     def create(self, validated_data):
         """
@@ -22,7 +22,7 @@ class PostStatusSerializer(serializers.ModelSerializer):
         post = validated_data['post']
         owner = validated_data['owner']
         status = validated_data['status']
-
+        validated_data['profile'] = self.context['request'].user.profile
         existing_instance = PostStatus.objects.filter(post=post, owner=owner).first()
 
         if existing_instance:

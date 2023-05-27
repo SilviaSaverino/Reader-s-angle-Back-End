@@ -1,6 +1,7 @@
 from rest_framework import generics, filters
-from django.db.models import Count
+from django.db.models import Count, Case, When
 from readersandle_api.permissions import IsOwnerOrReadOnly
+from poststatus.models import PostStatus
 from .models import Profile
 from .serializers import ProfileSerializer
 
@@ -12,7 +13,9 @@ class ProfileList(generics.ListAPIView):
     """
     queryset = Profile.objects.annotate(
         posts_count = Count('owner__post', distinct=True),
-        reviews_count = Count('owner__review', distinct=True)
+        reviews_count = Count('owner__review', distinct=True),
+        read_posts_count=Count(Case(When(status_choice__status='Read', then=1))),
+        will_read_posts_count=Count(Case(When(status_choice__status='Will read', then=1))),
     ).order_by('-created_at')
     serializer_class = ProfileSerializer
     filter_backends= [
@@ -21,6 +24,8 @@ class ProfileList(generics.ListAPIView):
     ordering_fields = [
         'posts_count',
         'reviews_count',
+        'read_posts_count',
+        'will_read_posts_count',
     ]
 
 
