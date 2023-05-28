@@ -444,5 +444,188 @@ After completing these steps, I clicked on the posts and profile default images 
 
 During development, an issue was encountered where users were unable to follow posts due to some errors in my model and lately a TypeError in the code. The error occurred because the serializer was trying to pass an unexpected keyword argument to the PostFollower.objects.create() method. The problem was resolved by updating the model and its serializer's create() method to handle the creation of the PostFollower object correctly.
 
+# Deployment:
 
+## Deploying to Heroku
+Follow these steps to deploy your application to Heroku:
+
+### Create a PostgreSQL Database on ElephantSQL
+- Go to ElephantSQL and log in or create a new account.
+- Access the Dashboard and click "Create New Instance".
+- Provide a name for the database and select the Tiny Turtle plan and region.
+- Click the "Review" button and then "Create Instance".
+- Copy the database URL for later use.
+
+### Create an App on Heroku
+- Visit Heroku and log in or create a new account.
+- Click on "Create new app".
+- Give your app a name and click "Create app".
+- Open the "Settings" tab and add a Config Var for "DATABASE_URL". Paste the URL of the PostgreSQL database created on ElephantSQL.
+
+### Set up the GitPod Workspace
+
+Before deploying to Heroku, make the following changes in the GitPod workspace:
+
+- Install the necessary packages for Heroku to connect to external databases:
+
+$ pip install dj_database_url==0.5.0 psycopg2
+
+- Import dj_database_url in settings.py:
+
+import os
+import dj_database_url
+
+- Update the DATABASES section in settings.py to distinguish between the development and production databases:
+
+if 'DEV' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    }
+
+- Add the following line to env.py to link to the PostgreSQL database URL:
+
+    os.environ.setdefault("DATABASE_URL", "PostgreSQL URL")
+
+- Test the Database Connection
+
+- Comment out the DEV environment variable in env.py:
+
+os.environ['CLOUDINARY_URL'] = "cloudinary://..."
+os.environ['SECRET_KEY'] = "..."
+(COMMENTEDOUT FOR NOW->)os.environ['DEV'] = '1'
+os.environ['DATABASE_URL'] = "postgres://..."
+
+- Add a print("connected") statement to the else clause in the DATABASES section of settings.py to verify the connection.
+
+- Perform a dry-run migration to confirm the connection to the external database. If it works, you can remove the print statement:
+
+ manage.py makemigrations --dry-run
+
+- Migrate the database:
+
+ manage.py migrate
+
+- Create a superuser:
+
+ manage.py createsuperuser
+
+GitPod Workspace Setup (Continued)
+
+- Install gunicorn and update requirements.txt:
+
+$ pip install gunicorn django-cors-headers
+$ pip freeze --local > requirements.txt
+
+- Create a Procfile and add the following lines:
+
+release: python manage.py makemigrations && python manage.py migrate
+web: gunicorn '<your_app_name>.wsgi'
+
+-Add the allowed hosts to settings.py:
+
+ALLOWED_HOSTS = ['localhost', '<your_app_name>.herokuapp.com']
+
+- Add corsheaders to INSTALLED_APPS in settings.py:
+
+INSTALLED_APPS = [
+    ...
+    'dj_rest_auth.registration',
+    'corsheaders',
+    ...
+ ]
+
+- Add the corsheaders middleware at the top of the MIDDLEWARE list in settings.py:
+
+MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    ...
+]
+
+- Set the CORS_ALLOWED_ORIGINS or CORS_ALLOWED_ORIGIN_REGEXES based on the environment variables in settings.py:
+
+if 'CLIENT_ORIGIN' in os.environ:
+    CORS_ALLOWED_ORIGINS = [
+        os.environ.get('CLIENT_ORIGIN')
+    ]
+else:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://.*\.gitpod\.io$",
+    ]
+
+- Enable sending cookies in cross-origin requests by adding the following code in settings.py:
+
+CORS_ALLOW_CREDENTIALS = True
+
+- Set the JWT_AUTH_SAMESITE attribute to 'None' to allow cross-platform deployment in settings.py:
+
+JWT_AUTH_SAMESITE = 'None'
+
+- Set the SECRET_KEY in settings.py to retrieve it from the environment variable:
+
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+- Update the value of the SECRET_KEY environment variable in env.py with a new random value:
+
+os.environ.setdefault("SECRET_KEY", "CreateANEWRandomValueHere")
+
+- Set the DEBUG value to True only if the DEV environment variable exists in env.py:
+
+DEBUG = 'DEV' in os.environ
+
+- Uncomment the DEV environment variable in env.py:
+
+import os
+
+os.environ['CLOUDINARY_URL'] = "cloudinary://..."
+os.environ['SECRET_KEY'] = "..."
+os.environ['DEV'] = '1'
+os.environ['DATABASE_URL'] = "postgres://..."
+
+- Ensure that the project's requirements.txt file is up to date. In the GitPod terminal, enter the following command:
+
+$ pip freeze --local > requirements.txt
+
+## Heroku Deployment
+
+- Add the SECRET_KEY and CLOUDINARY_URL as Config Vars in Heroku. The SECRET_KEY is a randomly generated string, and the CLOUDINARY_URL is copied from settings.py.
+
+- To fix the dj-rest-auth logout bug, create a custom logout view that sends an expired token to force logout. You can copy the code from this repository and update the URLs in this file.
+
+- Modify the ALLOWED_HOSTS in settings.py to make the Heroku host an environment variable to prevent multiple instances:
+
+ALLOWED_HOSTS = [
+    os.environ.get('ALLOWED_HOST'),
+    'localhost',
+]
+
+- Add the Heroku app name as an additional config var named ALLOWED_HOST in Heroku.
+
+- Add CLIENT_ORIGIN_DEV to allow development of the front-end with GitPod. Replace the else statement in the if 'CLIENT_ORIGIN...' block with the following code:
+
+if 'CLIENT_ORIGIN_DEV' in os.environ:
+    extracted_url = re.match(r'^.+-', os.environ.get('CLIENT_ORIGIN_DEV', ''), re.IGNORECASE).group(0)
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        rf"{extracted_url}(eu|us)\d+\w\.gitpod\.io$",
+    ]
+
+- Commit and push the changes to GitHub.
+
+- In Heroku, go to the "Deploy" tab.
+
+- Select "Connect to GitHub".
+
+- Choose your project repository.
+
+- Click on "Connect" to establish the connection.
+
+- Use "Deploy Branch" from the Manual Deploy section.
+
+- Select the main branch and click "Deploy".
 
