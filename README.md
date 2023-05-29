@@ -629,3 +629,41 @@ if 'CLIENT_ORIGIN_DEV' in os.environ:
 
 - Select the main branch and click "Deploy".
 
+# Technologies and Frameworks Utilized:
+
+### Programming Languages:
+- Python
+
+### Web Frameworks:
+- Django: A high-level Python web framework employed for developing the project.
+- djangorestframework: A toolkit utilized for constructing web APIs with Django.
+
+### External Python Packages:
+- asgiref: ASGI (Asynchronous Server Gateway Interface) framework.
+- cloudinary: Integration with Cloudinary.
+- dj-database-url: Enables the utilization of the 'DATABASE_URL' environmental variable in the Django project settings file to connect to a PostgreSQL database.
+- dj-rest-auth: API endpoints for handling authentication in Django Rest Framework.
+- Django: High-level Python web framework.
+- django-allauth: A set of Django applications used for account registration, management, and authentication.
+- django-cloudinary-storage: Integration with Cloudinary.
+- django-cors-headers: A Django app that adds CORS headers to responses.
+- django-filter: An application that allows dynamic QuerySet filtering from URL parameters.
+- djangorestframework: Toolkit for building web APIs.
+- djangorestframework-simplejwt: JSON Web Token authentication backend for the Django REST Framework.
+- gunicorn: Python WSGI HTTP server.
+- oauthlib: OAuth library for Python.
+- Pillow: Fork of PIL, the Python Imaging Library, providing image processing capabilities.
+- psycopg2: Python PostgreSQL database adapter.
+- PyJWT: JSON Web Token implementation for Python.
+- python3-openid: OpenID authentication for Python.
+- pytz: World timezone definitions for Python.
+- requests-oauthlib: OAuth library for Python requests.
+- sqlparse: Library for parsing SQL statements in Python.
+- python-dotenv: Sets key-value pairs from the .env file as environmental variables.
+
+# Credits
+To complete this project, I relied on various sources of information, including articles found online. I've mainly referred to module of CodeInstitute and took references from other alumnis projects.
+
+# Acknowledgements
+I would like to thank my mentor Spencer for his support and for taking the time to review this project.
+I am thankful for my dear friend Francesco for being a constant source of support, and for my family members Martina and Cosimo for their love and encouragement. I would also like to acknowledge the creators and contributors of the online resources mentioned in the Credits section for providing valuable guidance and insights.
