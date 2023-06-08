@@ -21,6 +21,6 @@ class PostStatusDetail(generics.RetrieveUpdateDestroyAPIView):
     API view for retrieving, updating, and deleting a specific PostStatus instance.
     """
     # permission_classes = [IsOwnerOrReadOnly]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = PostStatusSerializer
     queryset = PostStatus.objects.all()
