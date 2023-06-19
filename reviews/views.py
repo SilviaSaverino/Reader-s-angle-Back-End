@@ -13,7 +13,8 @@ class ReviewList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Review.objects.annotate(
         reviewlikes_count= Count(
-            'owner__reviewlike', distinct=True
+            # 'owner__reviewlike', distinct=True
+            'reviewlike', distinct=True
         )
     ).order_by('-created_at')
     filter_backends = [
