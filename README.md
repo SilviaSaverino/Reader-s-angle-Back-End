@@ -1,4 +1,4 @@
-# Reader's angle
+p# Reader's angle
 'Reader's angle' website project had been created as a final portfolio project for Code Institute full stack course! The project aims to provide an intuitive backend solution using Django Rest Framework.
 
 At the core of this website, users can create posts dedicated to books, allowing them to express their thoughts, opinions, and recommendations for others to explore. Additionally, users have the opportunity to provide detailed reviews, offering valuable feedback on specific books and contributing to a vibrant literary community. By expressing their liking for posts and indicating their reading intentions (whether they have read a book or plan to read it), users can engage with books in a personalized and meaningful manner.
@@ -371,6 +371,24 @@ A GET request to the /review-likes/int:pk/ endpoint retrieves a specific review 
 The ReviewLikeSerializer class is used to serialize and deserialize the review like data, ensuring consistent representation of the review like in JSON format.
 
 To restrict access and ensure that only the owner of the review like can delete it, the IsOwnerOrReadOnly permission class is used. This permission class allows read access to anyone but only allows write access to the owner of the review like.
+
+## ProfileList API View:
+
+The ProfileList API view allows for listing all profiles. Profile creation is handled by Django signals, which automatically creates a profile when a new user is registered. It is implemented as a ListAPIView from the Django REST Framework generics module.
+
+A GET request to the /profiles/ endpoint retrieves a list of all profiles. The profiles are ordered by their creation date in descending order (-created_at). The profile data is serialized using the ProfileSerializer class.
+
+The view also supports ordering of the profiles based on various fields such as posts_count, reviews_count, read_posts_count, and will_read_posts_count. The ordering can be controlled using the ordering query parameter in the request URL.
+
+## ProfileDetail API View:
+
+The ProfileDetail API view is responsible for retrieving and updating a specific profile if the current user is the owner. It is implemented as a RetrieveUpdateAPIView from the Django REST Framework generics module.
+
+A GET request to the /profiles/int:pk/ endpoint retrieves a specific profile identified by its profile ID. If the user is the owner of the profile, they can also perform update operations on the profile using the appropriate request methods.
+
+The ProfileSerializer class is used to serialize and deserialize the profile data, ensuring consistent representation of the profile in JSON format.
+
+To restrict access and ensure that only the owner of the profile can modify it, the IsOwnerOrReadOnly permission class is used. This permission class allows read access to anyone but only allows write access to the owner of the profile.
 
 # Manual testing:
 
