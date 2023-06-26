@@ -38,7 +38,7 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
     queryset = Profile.objects.annotate(
         posts_count=Count('owner__post', distinct=True),
         reviews_count=Count('owner__review', distinct=True),
-        read_posts_count=Count('owner__status_choice', filter=Case(When(owner__status_choice__status='Read', then=1)), distinct=True),
-        will_read_posts_count=Count('owner__status_choice', filter=Case(When(owner__status_choice__status='Will read', then=1)), distinct=True),
+        # read_posts_count=Count('owner__status_choice', filter=Case(When(owner__status_choice__status='Read', then=1)), distinct=True),
+        # will_read_posts_count=Count('owner__status_choice', filter=Case(When(owner__status_choice__status='Will read', then=1)), distinct=True),
     ).all()
     serializer_class = ProfileSerializer
