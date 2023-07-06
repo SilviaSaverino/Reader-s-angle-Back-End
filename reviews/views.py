@@ -12,8 +12,7 @@ class ReviewList(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Review.objects.annotate(
-        reviewlikes_count= Count(
-            # 'owner__reviewlike', distinct=True
+        reviewlikes_count=Count(
             'reviewlike', distinct=True
         )
     ).order_by('-created_at')

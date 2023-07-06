@@ -9,7 +9,6 @@ class PostStatusList(generics.ListCreateAPIView):
     API view for listing and creating PostStatus instances.
     """
     serializer_class = PostStatusSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     permission_classes = [permissions.IsAuthenticated]
     queryset = PostStatus.objects.all()
 
@@ -20,7 +19,6 @@ class PostStatusDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     API view for retrieving, updating, and deleting a specific PostStatus instance.
     """
-    # permission_classes = [IsOwnerOrReadOnly]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = PostStatusSerializer
     queryset = PostStatus.objects.all()
